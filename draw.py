@@ -1,9 +1,8 @@
 from constants import *
 import tkinter as tk
-from tkinter import simpledialog
+from tkinter import filedialog, simpledialog
 import json
 import os
-import glob
 
 pos = []
 players = []
@@ -185,11 +184,10 @@ def save(phase):
 
 def open_saved(message):
     clear()
-    json_files = files()
-    opened = simpledialog.askstring("Message", f"Enter file name:\n{json_files}")
+    opened = filedialog.askopenfilename()
     message = ""
     try:
-        with open(docs_folder+str(opened)+'.json', "r") as f:
+        with open(str(opened), "r") as f:
             pl, po, ol, dr, ro, ms = json.load(f)
             for values in pl.values():
                 if values not in players:
@@ -211,21 +209,12 @@ def open_saved(message):
 def delete_files(phase):
     clear()
     phase = None
-    json_files = files()
-    opened = simpledialog.askstring("Message", f"Enter file name:\n{json_files}")
+    opened = str(filedialog.askopenfile())
+    opened = opened[25:58]
     delete = (".json", ".png")
     for i in delete:
         try:
-            os.remove(docs_folder+opened+i)
+            os.remove(opened+i)
         except:
             pass
     return phase
-
-def files():
-    json_files = [f for f in glob.glob(docs_folder+"*.json")]
-    formatted_files = []
-    for i in json_files:
-        i = i.split(".json")
-        i = i[0].split("\\")
-        formatted_files.append(i[-1])
-    return formatted_files
