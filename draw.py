@@ -163,9 +163,9 @@ def save(phase):
     if not os.path.exists(docs_folder):
         os.makedirs(docs_folder)
     try:
-        save = simpledialog.askstring("Message", "Enter title to save:")
+        save = str(filedialog.asksaveasfile(defaultextension=".json"))
         draw(message)
-        pg.image.save(screen, docs_folder+save+'.png')
+        pg.image.save(screen, save[25:-34]+'.png')
 
         for rect in range(len(players)):
             rect_players[len(rect_players)] = (players[rect][0], players[rect][1], players[rect][2], players[rect][3])
@@ -176,7 +176,7 @@ def save(phase):
         for rect in range(1, len(routes), 2):
             rect_routes[len(rect_routes)] = (routes[rect-1], routes[rect])
         my_list = [rect_players, pos, rect_ols, rect_draw, rect_routes, message]
-        with open(docs_folder+save+'.json', "w") as f:
+        with open(save[25:-34]+'.json', "w") as f:
             json.dump(my_list, f)
     except:
         pass
@@ -210,7 +210,7 @@ def delete_files(phase):
     clear()
     phase = None
     opened = str(filedialog.askopenfile())
-    opened = opened[25:58]
+    opened = opened[25:-34]
     delete = (".json", ".png")
     for i in delete:
         try:
